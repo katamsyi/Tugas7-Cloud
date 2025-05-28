@@ -1,8 +1,10 @@
 
 
-// app.js
-const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app'; 
+// // app.js
+// const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/api'; 
 //"http://localhost:5000";
+const BASE_URL = 'https://fe-006-dot-g-11-450801.uc.r.appspot.com/api';
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.getElementById("logout-btn");
