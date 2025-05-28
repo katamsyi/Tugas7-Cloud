@@ -1,7 +1,7 @@
 
 
 // app.js
-const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/'; 
+const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/api'; 
 //"http://localhost:5000";
 
 document.addEventListener("DOMContentLoaded", () => {
