@@ -1,5 +1,5 @@
 runtime: python39
-services : fe-006
+service : fe-006
 instance_class: F1
 
 handlers:
