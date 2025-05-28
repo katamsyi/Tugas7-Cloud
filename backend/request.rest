@@ -24,3 +24,26 @@ Content-Type: application/json
 
 ### Hapus catatan
 DELETE http://localhost:5000/1
+
+### Register User
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "21testuser",
+  "password": "123456",
+  "name": "Test User"
+}
+
+### Login User
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "123456"
+}
+
+### Get Notes (gunakan token yang didapat dari response login di atas)
+GET http://localhost:5000/api/notes
+//Authorization: Bearer {{TOKEN_HERE}}

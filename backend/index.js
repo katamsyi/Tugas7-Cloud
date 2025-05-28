@@ -11,9 +11,14 @@ const authenticateToken = require('./middleware/authMiddleware');
 app.use(cors());
 app.use(express.json());
 
-// Route tanpa token (register dan login)
-app.use('/api/auth', authRoutes);
 
+// Route yang butuh token, pasang middleware JWT
+app.use('/api/notes', authenticateToken, noteRoutes);
+
+app.use("/api/auth", authRoutes);
+
+// Proteksi semua route notes
+app.use("/api/notes", authenticateToken, noteRoutes);
 // Route yang butuh token, pasang middleware JWT
 app.use('/api/notes', authenticateToken, noteRoutes);
 
