@@ -1,5 +1,5 @@
 // register.js
-const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/api';
+const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/notes';
 // const BASE_URL = 'https://fe-006-dot-g-11-450801.uc.r.appspot.com/api';
 
 
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const res = await fetch(`${BASE_URL}/notes/auth/register`, {
+      const res = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, name }),
