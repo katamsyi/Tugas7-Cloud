@@ -8,21 +8,17 @@ const authRoutes = require('./routes/authRoutes');
 const noteRoutes = require('./routes/noteRoutes');
 const authenticateToken = require('./middleware/authMiddleware');
 
+// Middleware global untuk parsing JSON dan cors
 app.use(cors());
 app.use(express.json());
 
-
-// Route yang butuh token, pasang middleware JWT
-app.use('/api/notes', authenticateToken, noteRoutes);
-
+// Route untuk autentikasi tanpa middleware
 app.use("/api/auth", authRoutes);
 
-// Proteksi semua route notes
-app.use("/api/notes", authenticateToken, noteRoutes);
-// Route yang butuh token, pasang middleware JWT
+// Route notes yang butuh autentikasi token JWT
 app.use('/api/notes', authenticateToken, noteRoutes);
 
-// Default route (opsional)
+// Default route
 app.get('/', (req, res) => {
   res.send('API Notes App berjalan');
 });
