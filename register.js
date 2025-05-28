@@ -1,5 +1,5 @@
 // register.js
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/notes';
 
 document.addEventListener("DOMContentLoaded", () => {
   const registerBtn = document.getElementById("register-btn");
