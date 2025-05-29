@@ -1,61 +1,84 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
+const { Op } = require("sequelize");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
+const generateAccessToken = (user) =>
+  jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
+    expiresIn: "15m",
+  });
+
+const generateRefreshToken = (user) =>
+  jwt.sign({ id: user.id, username: user.username }, REFRESH_SECRET, {
+    expiresIn: "7d",
+  });
 
 exports.register = async (req, res) => {
   try {
-    const { username, password, name } = req.body;
-
-    // Validasi input dasar
-    if (!username || !password) {
-      return res.status(400).json({ message: "Username dan password diperlukan" });
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "Semua field wajib diisi" });
     }
 
     const existingUser = await User.findOne({ where: { username } });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username sudah terdaftar" });
-    }
+    if (existingUser)
+      return res.status(409).json({ message: "Username sudah digunakan" });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({ username, password: hashedPassword, name });
+    const existingEmail = await User.findOne({ where: { email } });
+    if (existingEmail)
+      return res.status(409).json({ message: "Email sudah digunakan" });
 
-    res.status(201).json({ message: "User berhasil didaftarkan" });
+    const password_hash = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, email, password_hash });
+
+    res
+      .status(201)
+      .json({ message: "User berhasil didaftarkan", userId: user.id });
   } catch (err) {
-    console.error("Error saat register:", err);
-    res.status(500).json({ message: "Terjadi kesalahan server", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Terjadi kesalahan server", error: err.message });
   }
 };
 
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-
-    // Validasi input dasar
-    if (!username || !password) {
-      return res.status(400).json({ message: "Username dan password diperlukan" });
+    const { usernameOrEmail, password } = req.body;
+    if (!usernameOrEmail || !password) {
+      return res.status(400).json({ message: "Semua field wajib diisi" });
     }
 
-    const user = await User.findOne({ where: { username } });
-    if (!user) {
-      return res.status(401).json({ message: "Username atau password salah" });
-    }
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+      },
+    });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Username atau password salah" });
-    }
+    if (!user)
+      return res
+        .status(401)
+        .json({ message: "Username/email atau password salah" });
 
-    const token = jwt.sign(
-      { id: user.id, username: user.username },
-      JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid)
+      return res
+        .status(401)
+        .json({ message: "Username/email atau password salah" });
 
-    res.json({ token });
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    res.json({
+      accessToken,
+      refreshToken,
+      user: { id: user.id, username: user.username, email: user.email },
+    });
   } catch (err) {
-    console.error("Error saat login:", err);
-    res.status(500).json({ message: "Terjadi kesalahan server", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Terjadi kesalahan server", error: err.message });
   }
 };

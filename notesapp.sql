@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Bulan Mei 2025 pada 19.13
+-- Waktu pembuatan: 29 Bulan Mei 2025 pada 06.52
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.0.30
 
@@ -28,26 +28,22 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `notes` (
-  `id_Catatan` int(11) NOT NULL,
-  `Judul_Catatan` varchar(255) NOT NULL,
-  `Deskripsi_Catatan` text NOT NULL
+  `id` int(11) NOT NULL,
+  `judul_Catatan` varchar(255) NOT NULL,
+  `deskripsi_Catatan` text NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `notes`
 --
 
-INSERT INTO `notes` (`id_Catatan`, `Judul_Catatan`, `Deskripsi_Catatan`) VALUES
-(3, 'asasaasas', 'hhhhh'),
-(4, 'Testests', 'asagsagsagusag'),
-(6, 'c', 's'),
-(7, 'baru', 'aasasa'),
-(9, 'Belajar Cloud Computing', 'Mempelajari konsep dasar Cloud Computing imi'),
-(10, 'halo', 'aku tebak kamu milea ya?ddd'),
-(11, 'Belajar Cloud Computing', 'Mempelajari konsep dasar Cloud Computing'),
-(13, 'wd111', 'wdwsss'),
-(14, 'baru', 'ccc'),
-(15, 'dddd', 'ddd');
+INSERT INTO `notes` (`id`, `judul_Catatan`, `deskripsi_Catatan`, `createdAt`, `updatedAt`) VALUES
+(2, 'aaaa', 'aaaaa', '2025-05-29 04:45:19', '2025-05-29 04:45:19'),
+(3, 'aaaaaaa', 'aaaaa', '2025-05-29 04:45:25', '2025-05-29 04:45:25'),
+(4, 'aac', 'aaaaaaa', '2025-05-29 04:46:56', '2025-05-29 04:50:34'),
+(5, 'bb', 'bb', '2025-05-29 04:50:21', '2025-05-29 04:50:21');
 
 -- --------------------------------------------------------
 
@@ -57,19 +53,20 @@ INSERT INTO `notes` (`id_Catatan`, `Judul_Catatan`, `Deskripsi_Catatan`) VALUES
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `name` varchar(255) DEFAULT NULL
+  `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password_hash` text NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `name`) VALUES
-(1, 'admin', '$2b$10$mZbVDqTWB2ACYubW0uQuKe1z2sJCBKB5DYqCSmvZinckHYOhhpLoe', ''),
-(2, 'aaaa', '$2b$10$ISuZ29L8HPr.CibJAwbBkeVIig7pqzhA9qWE6SYdib10K/qIOtmvm', ''),
-(3, '12', '$2b$10$JyNJrLKcjx9p5eYp24s7WuodMrnW655RWpkvcbVcq9lefdnQA7YyO', '');
+INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `createdAt`, `updatedAt`) VALUES
+(1, 'userbaru123', 'userbaru123@example.com', '$2b$10$dm7cURkpWmjxqu8ByS.7yONvVDqH2VU.sWeNb6353rzDmCpxTfvQO', '2025-05-29 04:33:23', '2025-05-29 04:33:23'),
+(2, 'aa', 'aa', '$2b$10$ozQxomk7/DvIRH7eHUN1mOaU71NlS0.IAL5/I6XSiDZStdIgCZxpC', '2025-05-29 04:44:57', '2025-05-29 04:44:57');
 
 --
 -- Indexes for dumped tables
@@ -79,14 +76,15 @@ INSERT INTO `users` (`id`, `username`, `password`, `name`) VALUES
 -- Indeks untuk tabel `notes`
 --
 ALTER TABLE `notes`
-  ADD PRIMARY KEY (`id_Catatan`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
@@ -96,13 +94,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `notes`
 --
 ALTER TABLE `notes`
-  MODIFY `id_Catatan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

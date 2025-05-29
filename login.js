@@ -1,42 +1,30 @@
-// login.js
-const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/api/notes';
-//const BASE_URL = "http://localhost:5000";
+const loginBtn = document.getElementById("login-btn");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginBtn = document.getElementById("login-btn");
-  const authMessage = document.getElementById("auth-message");
+loginBtn.addEventListener("click", async () => {
+  const usernameOrEmail = document.getElementById("login-user").value.trim();
+  const password = document.getElementById("login-pass").value.trim();
 
-  loginBtn.addEventListener("click", async () => {
-    authMessage.textContent = "";
-    authMessage.style.color = "red"; // default warna error
+  if (!usernameOrEmail || !password) {
+    alert("Semua field harus diisi");
+    return;
+  }
 
-    const username = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value.trim();
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usernameOrEmail, password }),
+    });
 
-    if (!username || !password) {
-      authMessage.textContent = "Please enter username and password";
-      return;
-    }
-
-    try {
-      const res = await fetch(`${BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        authMessage.textContent = data.message || "Login failed";
-        return;
-      }
-
-      authMessage.style.color = "green";
-      localStorage.setItem("token", data.token);
+    const data = await res.json();
+    if (res.ok) {
+      localStorage.setItem("accessToken", data.accessToken);
+      alert("Login berhasil!");
       window.location.href = "index.html";
-    } catch (error) {
-      authMessage.textContent = "Login error: " + error.message;
+    } else {
+      alert(data.message || "Login gagal.");
     }
-  });
+  } catch (err) {
+    alert("Terjadi kesalahan saat login.");
+  }
 });

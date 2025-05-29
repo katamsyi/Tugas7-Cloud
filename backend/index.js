@@ -1,29 +1,35 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
-const authRoutes = require('./routes/authRoutes');
-const noteRoutes = require('./routes/noteRoutes');
-const authenticateToken = require('./middleware/authMiddleware');
+const authRoutes = require("./routes/authRoutes");
+const noteRoutes = require("./routes/noteRoutes");
+const authenticateToken = require("./middleware/authMiddleware");
 
-// Middleware global untuk parsing JSON dan cors
+const db = require("./models").sequelize;
+
+// Middleware global
 app.use(cors());
 app.use(express.json());
 
-// Route untuk autentikasi tanpa middleware
+// Route publik
 app.use("/api/auth", authRoutes);
 
-// Route notes yang butuh autentikasi token JWT
-app.use('/api/notes', authenticateToken, noteRoutes);
+// Route catatan (butuh token)
+app.use("/api/notes", authenticateToken, noteRoutes);
 
-// Default route
-app.get('/', (req, res) => {
-  res.send('API Notes App berjalan');
+// Root
+app.get("/", (req, res) => {
+  res.send("Notes App API berjalan");
 });
 
+// Jalankan server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server berjalan di port ${PORT}`);
-});
+db.sync({ force: true }) // ini akan hapus dan buat ulang tabel sesuai model
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server berjalan di port ${PORT}`);
+    });
+  });

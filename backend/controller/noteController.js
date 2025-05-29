@@ -1,82 +1,76 @@
 const { Note } = require("../models");
 
-// Get semua catatan
 exports.getAllNotes = async (req, res) => {
   try {
     const notes = await Note.findAll();
-    res.json(notes);
+    const formatted = notes.map((note) => ({
+      id: note.id,
+      judul_Catatan: note.judul_Catatan,
+      deskripsi_Catatan: note.deskripsi_Catatan,
+      createdAt: note.createdAt.toISOString(),
+      updatedAt: note.updatedAt.toISOString(),
+    }));
+    res.json(formatted);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Something went wrong", error: error.message });
+    res.status(500).json({ message: "Gagal mengambil catatan", error: error.message });
   }
 };
 
-// Get catatan berdasarkan ID
 exports.getNoteById = async (req, res) => {
   try {
     const note = await Note.findByPk(req.params.id);
-    if (!note)
-      return res.status(404).json({ message: "Note could not be found" });
-    res.json(note);
+    if (!note) return res.status(404).json({ message: "Catatan tidak ditemukan" });
+
+    res.json({
+      id: note.id,
+      judul_Catatan: note.judul_Catatan,
+      deskripsi_Catatan: note.deskripsi_Catatan,
+      createdAt: note.createdAt.toISOString(),
+      updatedAt: note.updatedAt.toISOString(),
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Something went wrong", error: error.message });
+    res.status(500).json({ message: "Gagal mengambil catatan", error: error.message });
   }
 };
 
-// Tambah catatan baru
 exports.createNote = async (req, res) => {
   try {
     const { judul_Catatan, deskripsi_Catatan } = req.body;
     if (!judul_Catatan || !deskripsi_Catatan) {
-      return res
-        .status(400)
-        .json({ message: "Title and description are required" });
+      return res.status(400).json({ message: "Judul dan deskripsi wajib diisi" });
     }
 
     const newNote = await Note.create({ judul_Catatan, deskripsi_Catatan });
     res.status(201).json(newNote);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Something went wrong", error: error.message });
+    res.status(500).json({ message: "Gagal menambahkan catatan", error: error.message });
   }
 };
 
-// Update catatan berdasarkan ID
 exports.updateNote = async (req, res) => {
   try {
     const note = await Note.findByPk(req.params.id);
-    if (!note)
-      return res.status(404).json({ message: "Note could not be found" });
+    if (!note) return res.status(404).json({ message: "Catatan tidak ditemukan" });
 
     await note.update({
       judul_Catatan: req.body.judul_Catatan,
       deskripsi_Catatan: req.body.deskripsi_Catatan,
     });
 
-    res.json({ message: "Note has been updated", note });
+    res.json({ message: "Catatan berhasil diperbarui", note });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Something went wrong", error: error.message });
+    res.status(500).json({ message: "Gagal memperbarui catatan", error: error.message });
   }
 };
 
-// Hapus catatan berdasarkan ID
 exports.deleteNote = async (req, res) => {
   try {
     const note = await Note.findByPk(req.params.id);
-    if (!note)
-      return res.status(404).json({ message: "Note could not be found" });
+    if (!note) return res.status(404).json({ message: "Catatan tidak ditemukan" });
 
     await note.destroy();
-    res.json({ message: "Note has been deleted" });
+    res.json({ message: "Catatan berhasil dihapus" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Something went wrong", error: error.message });
+    res.status(500).json({ message: "Gagal menghapus catatan", error: error.message });
   }
 };

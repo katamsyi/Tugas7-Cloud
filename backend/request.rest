@@ -1,49 +1,50 @@
-### Get semua catatan
-GET http://localhost:5000/
-
-### Get catatan berdasarkan ID
-GET http://localhost:5000/1
-
-### Tambah catatan
-POST http://localhost:5000/
+### 🔐 Register User
+POST http://localhost:5000/api/auth/register
 Content-Type: application/json
+
+{
+  "username": "userbaru123",
+  "email": "userbaru123@example.com",
+  "password": "12345678"
+}
+
+### 🔐 Login User
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "usernameOrEmail": "userbaru123",
+  "password": "12345678"
+}
+
+### 📥 Get Semua Catatan (auth required)
+GET http://localhost:5000/api/notes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODQ5MzIxMywiZXhwIjoxNzQ4NDk0MTEzfQ.uexEnIHdkhiQpS34sMxjOnD7fy-5bHmGzPNptlfQYNE
+
+### 📄 Get Catatan berdasarkan ID
+GET http://localhost:5000/api/notes/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODQ5MzIxMywiZXhwIjoxNzQ4NDk0MTEzfQ.uexEnIHdkhiQpS34sMxjOnD7fy-5bHmGzPNptlfQYNE
+
+### ➕ Tambah Catatan
+POST http://localhost:5000/api/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODQ5MzIxMywiZXhwIjoxNzQ4NDk0MTEzfQ.uexEnIHdkhiQpS34sMxjOnD7fy-5bHmGzPNptlfQYNE
 
 {
   "judul_Catatan": "Belajar Cloud Computing",
   "deskripsi_Catatan": "Mempelajari konsep dasar Cloud Computing"
 }
 
-### Update catatan
-PUT http://localhost:5000/1
+### ✏️ Update Catatan
+PUT http://localhost:5000/api/notes/1
 Content-Type: application/json
+//Authorization: Bearer {{PASTE_YOUR_ACCESS_TOKEN_HERE}}
 
 {
   "judul_Catatan": "Belajar Cloud Computing dengan baik",
   "deskripsi_Catatan": "Mempelajari konsep dasar Cloud Computing dengan baik"
 }
 
-### Hapus catatan
-DELETE http://localhost:5000/1
-
-### Register User
-POST http://localhost:5000/api/auth/register
-Content-Type: application/json
-
-{
-  "username": "22q1testuser",
-  "password": "123456",
-  "name": "Test User"
-}
-
-### Login User
-POST http://localhost:5000/api/auth/login
-Content-Type: application/json
-
-{
-  "username": "testuser",
-  "password": "123456"
-}
-
-### Get Notes (gunakan token yang didapat dari response login di atas)
-GET http://localhost:5000/api/notes
-//Authorization: Bearer {{TOKEN_HERE}}
+### ❌ Hapus Catatan
+DELETE http://localhost:5000/api/notes/1
+//Authorization: Bearer {{PASTE_YOUR_ACCESS_TOKEN_HERE}}

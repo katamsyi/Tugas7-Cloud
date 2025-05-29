@@ -74,9 +74,9 @@
 <body>
     <div class="auth-container">
         <h2>Register</h2>
-        <input id="register-username" type="text" placeholder="Username" autocomplete="username" />
-        <input id="register-password" type="password" placeholder="Password" autocomplete="new-password" />
-        <input id="register-name" type="text" placeholder="Full Name (optional)" autocomplete="name" />
+        <input type="text" id="register-username" placeholder="Username" required />
+        <input type="email" id="register-email" placeholder="Email" required />
+        <input type="password" id="register-password" placeholder="Password" required />
         <button id="register-btn">Register</button>
         <div class="link">Already have an account? <a href="login.html">Login</a></div>
         <p id="auth-message" class="auth-message"></p>

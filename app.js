@@ -1,196 +1,113 @@
+const token = localStorage.getItem("accessToken");
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${token}`,
+};
 
+const judulInput = document.getElementById("judul");
+const deskripsiInput = document.getElementById("deskripsi");
+const tambahBtn = document.getElementById("tambah-btn");
+const noteList = document.getElementById("note-list");
+const logoutBtn = document.getElementById("logout-btn");
 
-// // app.js
-const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/api/notes'; 
-//"http://localhost:5000";
-// const BASE_URL = 'http://localhost:5000';
-
-//const BASE_URL = "http://localhost:5000";
-
-document.addEventListener("DOMContentLoaded", () => {
-  const logoutBtn = document.getElementById("logout-btn");
-  const addNoteBtn = document.getElementById("add-note");
-  const saveNoteBtn = document.getElementById("save-note");
-  const updateNoteBtn = document.getElementById("update-note");
-  const deleteNoteBtn = document.getElementById("delete-note");
-
-  logoutBtn.addEventListener("click", logoutUser);
-  addNoteBtn.addEventListener("click", prepareNewNote);
-  saveNoteBtn.addEventListener("click", saveNewNote);
-  updateNoteBtn.addEventListener("click", updateNote);
-  deleteNoteBtn.addEventListener("click", deleteNote);
-
-  // On load
-  if (!localStorage.getItem("token")) {
-    alert("You must login first!");
-    window.location.href = "login.html";
-  } else {
-    loadNotes();
-    resetNoteDetails();
-  }
-});
-
-let selectedNoteId = null;
-
-async function loadNotes() {
-  const token = localStorage.getItem("token");
-  try {
-    const response = await fetch(`${BASE_URL}/notes`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!response.ok) throw new Error("Failed to load notes");
-    const notes = await response.json();
-    displayNoteTitles(notes);
-  } catch (error) {
-    alert("Error loading notes: " + error.message);
-    if (error.message.includes("401") || error.message.includes("403")) {
-      logoutUser();
-    }
-  }
-}
-
-function displayNoteTitles(notes) {
-  const notesList = document.getElementById("notes-list");
-  notesList.innerHTML = "";
-  notes.forEach((note) => {
-    const li = document.createElement("li");
-    li.textContent = note.judul_Catatan;
-    li.onclick = () => loadNoteDetails(note.id_Catatan);
-    notesList.appendChild(li);
-  });
-}
-
-async function loadNoteDetails(id) {
-  const token = localStorage.getItem("token");
-  try {
-    const response = await fetch(`${BASE_URL}/notes/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!response.ok) throw new Error("Failed to load note details");
-    const note = await response.json();
-
-    document.getElementById("note-title").value = note.judul_Catatan;
-    document.getElementById("note-content").value = note.deskripsi_Catatan;
-
-    selectedNoteId = note.id_Catatan;
-    toggleButtonsForSelectedNote();
-  } catch (error) {
-    alert("Error loading note: " + error.message);
-  }
-}
-
-function prepareNewNote() {
-  selectedNoteId = null;
-  resetNoteDetails();
-  toggleButtonsForNewNote();
-}
-
-async function saveNewNote() {
-  const token = localStorage.getItem("token");
-  const title = document.getElementById("note-title").value.trim();
-  const content = document.getElementById("note-content").value.trim();
-
-  if (!title || !content) {
-    alert("Title and content cannot be empty");
-    return;
-  }
-
-  try {
-    const response = await fetch(`${BASE_URL}/notes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        judul_Catatan: title,
-        deskripsi_Catatan: content,
-      }),
-    });
-    if (!response.ok) throw new Error("Failed to save note");
-    alert("Note saved");
-    loadNotes();
-    resetNoteDetails();
-  } catch (error) {
-    alert("Error saving note: " + error.message);
-  }
-}
-
-async function updateNote() {
-  if (!selectedNoteId) {
-    alert("Select a note to update");
-    return;
-  }
-  const token = localStorage.getItem("token");
-  const title = document.getElementById("note-title").value.trim();
-  const content = document.getElementById("note-content").value.trim();
-
-  if (!title || !content) {
-    alert("Title and content cannot be empty");
-    return;
-  }
-
-  try {
-    const response = await fetch(`${BASE_URL}/notes/${selectedNoteId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        judul_Catatan: title,
-        deskripsi_Catatan: content,
-      }),
-    });
-    if (!response.ok) throw new Error("Failed to update note");
-    alert("Note updated");
-    loadNotes();
-  } catch (error) {
-    alert("Error updating note: " + error.message);
-  }
-}
-
-async function deleteNote() {
-  if (!selectedNoteId) {
-    alert("Select a note to delete");
-    return;
-  }
-  if (!confirm("Are you sure you want to delete this note?")) return;
-
-  const token = localStorage.getItem("token");
-  try {
-    const response = await fetch(`${BASE_URL}/notes/${selectedNoteId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!response.ok) throw new Error("Failed to delete note");
-    alert("Note deleted");
-    loadNotes();
-    resetNoteDetails();
-  } catch (error) {
-    alert("Error deleting note: " + error.message);
-  }
-}
-
-function logoutUser() {
-  localStorage.removeItem("token");
+if (!token) {
+  alert("Silakan login terlebih dahulu");
   window.location.href = "login.html";
 }
 
-function resetNoteDetails() {
-  document.getElementById("note-title").value = "";
-  document.getElementById("note-content").value = "";
-  toggleButtonsForNewNote();
-}
+const loadNotes = async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/notes`, { headers });
+    const data = await res.json();
 
-function toggleButtonsForSelectedNote() {
-  document.getElementById("save-note").style.display = "none";
-  document.getElementById("update-note").style.display = "inline-block";
-  document.getElementById("delete-note").style.display = "inline-block";
-}
+    noteList.innerHTML = "";
+    data.forEach((note) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <strong>${note.judul_Catatan}</strong><br>
+        <small>${note.deskripsi_Catatan}</small><br>
+        <button onclick="hapusNote(${note.id})">Hapus</button>
+        <button onclick="editNote(${note.id}, '${note.judul_Catatan}', '${note.deskripsi_Catatan}')">Edit</button>
+        <hr>
+      `;
+      noteList.appendChild(li);
+    });
+  } catch (err) {
+    alert("Gagal memuat catatan");
+  }
+};
 
-function toggleButtonsForNewNote() {
-  document.getElementById("save-note").style.display = "inline-block";
-  document.getElementById("update-note").style.display = "none";
-  document.getElementById("delete-note").style.display = "none";
-}
+tambahBtn.addEventListener("click", async () => {
+  const judul = judulInput.value.trim();
+  const deskripsi = deskripsiInput.value.trim();
+  if (!judul || !deskripsi) {
+    alert("Judul dan deskripsi harus diisi");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/notes`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ judul_Catatan: judul, deskripsi_Catatan: deskripsi }),
+    });
+
+    if (res.ok) {
+      judulInput.value = "";
+      deskripsiInput.value = "";
+      loadNotes();
+    } else {
+      alert("Gagal menambah catatan");
+    }
+  } catch (err) {
+    alert("Terjadi kesalahan saat menambah catatan");
+  }
+});
+
+const hapusNote = async (id) => {
+  if (!confirm("Yakin ingin menghapus catatan ini?")) return;
+  try {
+    const res = await fetch(`${BASE_URL}/notes/${id}`, {
+      method: "DELETE",
+      headers,
+    });
+
+    if (res.ok) {
+      loadNotes();
+    } else {
+      alert("Gagal menghapus catatan");
+    }
+  } catch (err) {
+    alert("Terjadi kesalahan saat menghapus catatan");
+  }
+};
+
+const editNote = async (id, oldTitle, oldDesc) => {
+  const newTitle = prompt("Judul baru:", oldTitle);
+  const newDesc = prompt("Deskripsi baru:", oldDesc);
+
+  if (!newTitle || !newDesc) return;
+
+  try {
+    const res = await fetch(`${BASE_URL}/notes/${id}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ judul_Catatan: newTitle, deskripsi_Catatan: newDesc }),
+    });
+
+    if (res.ok) {
+      loadNotes();
+    } else {
+      alert("Gagal mengedit catatan");
+    }
+  } catch (err) {
+    alert("Terjadi kesalahan saat mengedit catatan");
+  }
+};
+
+logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem("accessToken");
+  window.location.href = "login.html";
+});
+
+window.onload = loadNotes;

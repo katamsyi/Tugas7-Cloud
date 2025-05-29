@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -7,7 +7,10 @@ function authenticateToken(req, res, next) {
   if (!token) return res.status(401).json({ message: "Token tidak ditemukan" });
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: "Token tidak valid" });
+    if (err)
+      return res
+        .status(403)
+        .json({ message: "Token tidak valid atau expired" });
     req.user = user;
     next();
   });

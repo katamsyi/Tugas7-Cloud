@@ -2,13 +2,8 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
 const Note = sequelize.define(
-  "Note",
+  "notes",
   {
-    id_Catatan: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     judul_Catatan: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -19,8 +14,7 @@ const Note = sequelize.define(
     },
   },
   {
-    timestamps: false,
-    tableName: "notes",
+    timestamps: true,
   }
 );
 

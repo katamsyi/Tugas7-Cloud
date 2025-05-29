@@ -1,47 +1,30 @@
-// register.js
-const BASE_URL = 'https://notes-be006-371739253078.us-central1.run.app/api/notes';
-//const BASE_URL = "http://localhost:5000";
+const registerBtn = document.getElementById("register-btn");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const registerBtn = document.getElementById("register-btn");
-  const authMessage = document.getElementById("auth-message");
+registerBtn.addEventListener("click", async () => {
+  const username = document.getElementById("register-username").value.trim();
+  const email = document.getElementById("register-email").value.trim();
+  const password = document.getElementById("register-password").value.trim();
 
-  registerBtn.addEventListener("click", async () => {
-    authMessage.textContent = "";
-    authMessage.style.color = "red"; // default warna error
+  if (!username || !email || !password) {
+    alert("Semua field harus diisi");
+    return;
+  }
 
-    const username = document.getElementById("register-username").value.trim();
-    const password = document.getElementById("register-password").value.trim();
-    const name = document.getElementById("register-name").value.trim();
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password }),
+    });
 
-    if (!username || !password) {
-      authMessage.textContent = "Please enter username and password";
-      return;
+    const data = await res.json();
+    if (res.ok) {
+      alert("Registrasi berhasil. Silakan login.");
+      window.location.href = "login.html";
+    } else {
+      alert(data.message || "Registrasi gagal.");
     }
-
-    try {
-      const res = await fetch(`${BASE_URL}/api/auth/register`, {
-        // tambahkan /api di sini
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, name }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        authMessage.textContent = data.message || "Registration failed";
-        return;
-      }
-
-      authMessage.style.color = "green";
-      authMessage.textContent = "Registration successful, please login";
-
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 2000);
-    } catch (error) {
-      authMessage.textContent = "Registration error: " + error.message;
-    }
-  });
+  } catch (err) {
+    alert("Terjadi kesalahan saat register.");
+  }
 });
