@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ### 📥 Get Semua Catatan (auth required)
 GET http://localhost:5000/api/notes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODQ5MzIxMywiZXhwIjoxNzQ4NDk0MTEzfQ.uexEnIHdkhiQpS34sMxjOnD7fy-5bHmGzPNptlfQYNE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODUwMjg0NiwiZXhwIjoxNzQ4NTAzNzQ2fQ.Vg4lDi6TZQRHHLCtfooid48jl4xNBi2QZKspjM3lBKA
 
 ### 📄 Get Catatan berdasarkan ID
 GET http://localhost:5000/api/notes/1
@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 ### ➕ Tambah Catatan
 POST http://localhost:5000/api/notes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODQ5MzIxMywiZXhwIjoxNzQ4NDk0MTEzfQ.uexEnIHdkhiQpS34sMxjOnD7fy-5bHmGzPNptlfQYNE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODUwMjg0NiwiZXhwIjoxNzQ4NTAzNzQ2fQ.Vg4lDi6TZQRHHLCtfooid48jl4xNBi2QZKspjM3lBKA
 
 {
   "judul_Catatan": "Belajar Cloud Computing",
