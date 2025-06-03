@@ -139,14 +139,20 @@
     async function loadNotes() {
       try {
         const res = await fetch(`${BASE_URL}/notes`, { headers });
-        if (!res.ok) throw new Error("Gagal memuat catatan");
+        if (!res.ok) {
+          const errorData = await res.json();
+          console.error("Fetch error response:", errorData);
+          throw new Error(errorData.message || "Gagal memuat catatan");
+        }
         const notes = await res.json();
         displayNoteTitles(notes);
       } catch (err) {
+        console.error("Fetch error:", err);
         alert(err.message);
         logoutUser();
       }
     }
+
 
     function displayNoteTitles(notes) {
       const notesList = document.getElementById("notes-list");
