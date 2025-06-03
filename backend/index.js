@@ -27,9 +27,14 @@ app.get("/", (req, res) => {
 
 // Jalankan server
 const PORT = process.env.PORT || 5000;
-db.sync() // ini akan hapus dan buat ulang tabel sesuai model
+console.log("PORT yang dipakai:", PORT);
+
+db.sync()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server berjalan di port ${PORT}`);
     });
+  })
+  .catch((err) => {
+    console.error("Error saat sync database:", err);
   });
