@@ -10,7 +10,7 @@ loginBtn.addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
+    const res = await fetch("https://notes-be006-371739253078.us-central1.run.app/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ usernameOrEmail, password }),
