@@ -3,8 +3,8 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "userbaru123",
-  "email": "userbaru123@example.com",
+  "username": "userbaru1234",
+  "email": "userbaru1234@example.com",
   "password": "12345678"
 }
 
@@ -13,13 +13,13 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "usernameOrEmail": "userbaru123",
+  "usernameOrEmail": "userbaru1234",
   "password": "12345678"
 }
 
 ### 📥 Get Semua Catatan (auth required)
 GET http://localhost:5000/api/notes
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyYmFydTEyMyIsImlhdCI6MTc0ODUwMjg0NiwiZXhwIjoxNzQ4NTAzNzQ2fQ.Vg4lDi6TZQRHHLCtfooid48jl4xNBi2QZKspjM3lBKA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlcm5hbWUiOiJ1c2VyYmFydTEyMzQiLCJpYXQiOjE3NDg5NDAwNDksImV4cCI6MTc0ODk0MDk0OX0.aovYYZ51uB3YZbCFXfpuuLz4AwKLcHOrzlS4Dgl67k0
 
 ### 📄 Get Catatan berdasarkan ID
 GET http://localhost:5000/api/notes/1
