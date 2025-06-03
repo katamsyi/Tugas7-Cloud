@@ -11,7 +11,7 @@ registerBtn.addEventListener("click", async () => {
   }
 
   try {
-    const res = await fetch("https://notes-be006-371739253078.us-central1.run.app/api/notes", {
+    const res = await fetch("https://notes-be006-371739253078.us-central1.run.app/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, email, password }),
